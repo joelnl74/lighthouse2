@@ -14,6 +14,7 @@
 */
 
 #pragma once
+#include "Ray.h"
 
 namespace lh2core
 {
@@ -45,6 +46,7 @@ public:
 	void WaitForRender() { /* this core does not support asynchronous rendering yet */ }
 	CoreStats GetCoreStats() const override;
 	void Shutdown();
+	float3 Trace(ADVGR::Ray ray);
 
 	// unimplemented for the minimal core
 	inline void SetProbePos( const int2 pos ) override {}
@@ -70,6 +72,8 @@ private:
 	vector<Mesh> meshes;							// mesh data storage
 public:
 	CoreStats coreStats;							// rendering statistics
+	unsigned int screenPixels[640 * 480];
+	float3 screenData[640 * 480];
 };
 
 } // namespace lh2core
