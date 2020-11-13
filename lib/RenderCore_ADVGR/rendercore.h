@@ -15,6 +15,7 @@
 
 #pragma once
 #include "Ray.h"
+#include "Sphere.h"
 
 namespace lh2core
 {
@@ -74,6 +75,7 @@ public:
 	CoreStats coreStats;							// rendering statistics
 	unsigned int screenPixels[640 * 480];
 	float3 screenData[640 * 480];
+	Sphere sphere;
 };
 
 } // namespace lh2core

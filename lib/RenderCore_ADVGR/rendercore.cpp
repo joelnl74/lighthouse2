@@ -14,6 +14,7 @@
 */
 
 #include "core_settings.h"
+#include "Utils.h"
 
 using namespace lh2core;
 
@@ -24,6 +25,8 @@ using namespace lh2core;
 void RenderCore::Init()
 {
 	// initialize core
+	sphere.m_CenterPosition = make_float3(0, 0, 10);
+	sphere.m_Radius = 5;
 }
 
 //  +-----------------------------------------------------------------------------+
@@ -96,7 +99,14 @@ void RenderCore::Render( const ViewPyramid& view, const Convergence converge, bo
 
 float3 lh2core::RenderCore::Trace(ADVGR::Ray ray)
 {
-	return make_float3(255, 0, 0);
+	bool intersect = ADVGR::Utils::IntersectSphere(sphere, ray);
+
+	if (intersect)
+	{
+		return make_float3(255, 0, 0);
+	}
+
+	return make_float3(0, 0, 0);
 }
 
 //  +-----------------------------------------------------------------------------+
