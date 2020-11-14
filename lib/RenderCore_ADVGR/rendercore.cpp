@@ -14,7 +14,7 @@
 */
 
 #include "core_settings.h"
-#include "Utils.h"
+#include "Sphere.h"
 
 using namespace lh2core;
 
@@ -25,8 +25,11 @@ using namespace lh2core;
 void RenderCore::Init()
 {
 	// initialize core
-	sphere.m_CenterPosition = make_float3(0, 0, 1);
-	sphere.m_Radius = 0.5;
+	Sphere* sphere = new Sphere();
+	sphere->m_CenterPosition = make_float3(0, 0, 1);
+	sphere->m_Radius = 0.5;
+
+	m_Primitives.push_back(sphere);
 }
 
 //  +-----------------------------------------------------------------------------+
@@ -66,7 +69,7 @@ void RenderCore::SetGeometry( const int meshIdx, const float4* vertexData, const
 //  +-----------------------------------------------------------------------------+
 void RenderCore::Render( const ViewPyramid& view, const Convergence converge, bool async )
 {
-	ADVGR::Ray ray;
+	Ray ray;
 	float3 lower_left = make_float3(-2.0, -1.0, -1.0);
 	float3 horizontal = make_float3(4.0, 0.0, 0.0);
 	float3 vertical = make_float3(0.0, 2.0, 0.0);
@@ -107,9 +110,15 @@ void RenderCore::Render( const ViewPyramid& view, const Convergence converge, bo
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, SCRWIDTH, SCRHEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, screenPixels);
 }
 
-float3 lh2core::RenderCore::Trace(ADVGR::Ray ray)
+float3 lh2core::RenderCore::Trace(Ray ray)
 {
-	auto intersect = ADVGR::Utils::IntersectSphere(sphere, ray);
+	auto intersect = false;
+
+	//TODO save closest shape and draw that color.
+	for (auto &shape : m_Primitives)
+	{
+		intersect = shape->Intersect(ray);
+	}
 
 	if (intersect)
 	{
