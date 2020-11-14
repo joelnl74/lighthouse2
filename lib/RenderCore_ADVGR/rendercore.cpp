@@ -25,8 +25,8 @@ using namespace lh2core;
 void RenderCore::Init()
 {
 	// initialize core
-	sphere.m_CenterPosition = make_float3(320, 240, 30);
-	sphere.m_Radius = 25;
+	sphere.m_CenterPosition = make_float3(320, 240, 10);
+	sphere.m_Radius = 5;
 }
 
 //  +-----------------------------------------------------------------------------+
@@ -75,7 +75,7 @@ void RenderCore::Render( const ViewPyramid& view, const Convergence converge, bo
 		{
 			ray.t = INT_MIN;
 			ray.m_Origin = make_float3(x, y, view.pos.z);
-			ray.m_Direction = view.pos - ray.m_Origin;
+			ray.m_Direction = normalize(view.pos - ray.m_Origin);
 
 			screenData[x + y * 640] = Trace(ray);
 		}
