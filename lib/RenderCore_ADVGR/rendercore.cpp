@@ -25,8 +25,8 @@ using namespace lh2core;
 void RenderCore::Init()
 {
 	// initialize core
-	sphere.m_CenterPosition = make_float3(320, 240, 10);
-	sphere.m_Radius = 5;
+	sphere.m_CenterPosition = make_float3(0, 0, 1);
+	sphere.m_Radius = 0.5;
 }
 
 //  +-----------------------------------------------------------------------------+
@@ -67,15 +67,20 @@ void RenderCore::SetGeometry( const int meshIdx, const float4* vertexData, const
 void RenderCore::Render( const ViewPyramid& view, const Convergence converge, bool async )
 {
 	ADVGR::Ray ray;
-
+	float3 horizontal = make_float3(4.0, 0.0, 0.0);
+	float3 vertical = make_float3(0.0, 2.0, 0.0);
 	// render
 	for (int y = 0; y < 480; y++)
 	{
 		for (int x = 0; x < 640; x++)
 		{
-			ray.t = INT_MIN;
-			ray.m_Origin = make_float3(x, y, view.pos.z);
-			ray.m_Direction = normalize(view.pos - ray.m_Origin);
+			float u = (float)x / 640;
+			float v = (float)y / 480;
+
+			float3 direction = u * horizontal + v * vertical;
+
+			ray.m_Origin = make_float3(0, 0, 0);
+			ray.m_Direction = normalize(direction);
 
 			screenData[x + y * 640] = Trace(ray);
 		}
@@ -100,9 +105,9 @@ void RenderCore::Render( const ViewPyramid& view, const Convergence converge, bo
 
 float3 lh2core::RenderCore::Trace(ADVGR::Ray ray)
 {
-	ADVGR::Utils::IntersectSphere(sphere, ray);
+	bool b = ADVGR::Utils::IntersectSphere(sphere, ray);
 
-	if (ray.t >= 0)
+	if (b)
 	{
 		return make_float3(255, 0, 0);
 	}

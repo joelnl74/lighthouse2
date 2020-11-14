@@ -7,26 +7,16 @@ namespace ADVGR
 	static class Utils
 	{
 	public:
-		static void IntersectSphere(Sphere sphere, Ray ray)
+		static bool IntersectSphere(Sphere sphere, Ray ray)
 		{
-			float3 oc = sphere.m_CenterPosition - ray.m_Origin;
-			float t = dot(oc, ray.m_Direction);
-			float3 q = oc - t * ray.m_Direction;
-			float p2 = dot(q, q);
-			float r2 = sphere.m_Radius * sphere.m_Radius;
-			
-			if (p2 > r2)
-			{
-				return;
-			}
-			
-			float r2p2 = r2 - p2;
-			t -= sqrt(r2p2);
-			
-			if ((t < ray.t) && (t > 0))
-			{
-				ray.t = t;
-			}
+			float3 oc = ray.m_Origin - sphere.m_CenterPosition;
+			float a = dot(ray.m_Direction, ray.m_Direction);
+			float b = 2.0 * dot(oc, ray.m_Direction);
+			float c = dot(oc, oc) - (sphere.m_Radius * sphere.m_Radius);
+
+			float inFront = b * b - (4 * a * c);
+
+			return inFront > 0;
 		}
 	};
 }
