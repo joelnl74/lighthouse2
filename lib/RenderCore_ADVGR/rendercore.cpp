@@ -25,8 +25,8 @@ using namespace lh2core;
 void RenderCore::Init()
 {
 	// initialize core
-	sphere.m_CenterPosition = make_float3(0, 0, 10);
-	sphere.m_Radius = 5;
+	sphere.m_CenterPosition = make_float3(320, 240, 5);
+	sphere.m_Radius = 25;
 }
 
 //  +-----------------------------------------------------------------------------+
