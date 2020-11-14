@@ -16,6 +16,7 @@
 #pragma once
 #include "Ray.h"
 #include "Sphere.h"
+#include "rendersystem.h"
 
 namespace lh2core
 {
@@ -73,8 +74,8 @@ private:
 	vector<Mesh> meshes;							// mesh data storage
 public:
 	CoreStats coreStats;							// rendering statistics
-	unsigned int screenPixels[640 * 480];
-	float3 screenData[640 * 480];
+	unsigned int screenPixels[SCRWIDTH * SCRHEIGHT];
+	float3 screenData[SCRWIDTH * SCRHEIGHT];
 	Sphere sphere;
 };
 

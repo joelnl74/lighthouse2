@@ -70,25 +70,27 @@ void RenderCore::Render( const ViewPyramid& view, const Convergence converge, bo
 	float3 lower_left = make_float3(-2.0, -1.0, -1.0);
 	float3 horizontal = make_float3(4.0, 0.0, 0.0);
 	float3 vertical = make_float3(0.0, 2.0, 0.0);
+	float3 origin = make_float3(0, 0, 0);
 
 	// render
-	for (int y = 0; y < 480; y++)
+	for (int y = 0; y < SCRHEIGHT; y++)
 	{
-		for (int x = 0; x < 640; x++)
+		for (int x = 0; x < SCRWIDTH; x++)
 		{
-			float u = (float)x / (float)640;
-			float v = (float)y / (float)480;
+			float u = (float)x / (float)SCRWIDTH;
+			float v = (float)y / (float)SCRHEIGHT;
 
 			float3 direction = lower_left + u * horizontal + v * vertical;
 
-			ray.m_Origin = make_float3(0, 0, 0);
-			ray.m_Direction = normalize(direction);
+			ray.t = INT_MAX;
+			ray.m_Origin = origin;
+			ray.m_Direction = direction;
 
-			screenData[x + y * 640] = Trace(ray);
+			screenData[x + y * SCRWIDTH] = Trace(ray);
 		}
 	}
 
-	for (int i = 0; i < 640 * 480; i++)
+	for (int i = 0; i < SCRWIDTH * SCRHEIGHT; i++)
 	{
 		float3 p = screenData[i];
 
@@ -102,14 +104,14 @@ void RenderCore::Render( const ViewPyramid& view, const Convergence converge, bo
 
 	// copy pixel buffer to OpenGL render target texture
 	glBindTexture( GL_TEXTURE_2D, targetTextureID );
-	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 640, 480, 0, GL_RGBA, GL_UNSIGNED_BYTE, screenPixels);
+	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, SCRWIDTH, SCRHEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, screenPixels);
 }
 
 float3 lh2core::RenderCore::Trace(ADVGR::Ray ray)
 {
-	bool b = ADVGR::Utils::IntersectSphere(sphere, ray);
+	auto intersect = ADVGR::Utils::IntersectSphere(sphere, ray);
 
-	if (b)
+	if (intersect)
 	{
 		return make_float3(255, 0, 0);
 	}
