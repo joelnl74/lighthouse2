@@ -25,7 +25,7 @@ using namespace lh2core;
 void RenderCore::Init()
 {
 	// initialize core
-	sphere.m_CenterPosition = make_float3(320, 240, 5);
+	sphere.m_CenterPosition = make_float3(320, 240, 30);
 	sphere.m_Radius = 25;
 }
 
@@ -73,7 +73,8 @@ void RenderCore::Render( const ViewPyramid& view, const Convergence converge, bo
 	{
 		for (int x = 0; x < 640; x++)
 		{
-			ray.m_Origin = make_float3(x, y, 0);
+			ray.t = INT_MIN;
+			ray.m_Origin = make_float3(x, y, view.pos.z);
 			ray.m_Direction = view.pos - ray.m_Origin;
 
 			screenData[x + y * 640] = Trace(ray);
@@ -99,9 +100,9 @@ void RenderCore::Render( const ViewPyramid& view, const Convergence converge, bo
 
 float3 lh2core::RenderCore::Trace(ADVGR::Ray ray)
 {
-	bool intersect = ADVGR::Utils::IntersectSphere(sphere, ray);
+	ADVGR::Utils::IntersectSphere(sphere, ray);
 
-	if (intersect)
+	if (ray.t >= 0)
 	{
 		return make_float3(255, 0, 0);
 	}
