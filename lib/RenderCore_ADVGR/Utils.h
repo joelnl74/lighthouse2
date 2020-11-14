@@ -19,8 +19,18 @@ namespace ADVGR
 			{
 				return false;
 			}
+			
+			float r2p2 = r2 - p2;
+			t -= sqrt(r2p2);
+			
+			if ((t < ray.t) && (t > 0))
+			{
+				ray.t = t;
 
-			return true;
+				return true;
+			}
+
+			return false;
 		}
 	};
 }
