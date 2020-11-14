@@ -26,10 +26,16 @@ void RenderCore::Init()
 {
 	// initialize core
 	Sphere* sphere = new Sphere();
-	sphere->m_CenterPosition = make_float3(0, 0, 1);
+	sphere->m_CenterPosition = make_float3(0, 0, 5);
 	sphere->m_Radius = 0.5;
 
+	Sphere* sphere1 = new Sphere();
+	sphere1->m_CenterPosition = make_float3(1, -0.5, 5);
+	sphere1->m_Radius = 0.5;
+
 	m_Primitives.push_back(sphere);
+	m_Primitives.push_back(sphere1);
+
 }
 
 //  +-----------------------------------------------------------------------------+
@@ -118,12 +124,14 @@ float3 lh2core::RenderCore::Trace(Ray ray)
 	for (auto &shape : m_Primitives)
 	{
 		intersect = shape->Intersect(ray);
+
+		if (intersect)
+		{
+			return make_float3(255, 0, 0);
+		}
 	}
 
-	if (intersect)
-	{
-		return make_float3(255, 0, 0);
-	}
+
 
 	return make_float3(0, 0, 0);
 }
