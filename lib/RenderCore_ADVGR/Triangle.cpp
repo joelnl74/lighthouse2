@@ -2,22 +2,40 @@
 
 bool Triangle::Intersect(Ray ray)
 {
-	float3 e1 = point2 - point1;
-	float3 e2 = point3 - point1;
+    float episilon = 0.000001f;
+    float3 edge1, edge2, h, s, q;
+    float a, f, u, v;
 
-	float u = dot((ray.m_Origin - point1), cross(ray.m_Direction, e2)) / dot(e1, (cross(ray.m_Direction, e2)));
-	float v = dot(ray.m_Direction, (cross((ray.m_Origin - point1), e1)) / dot(e1, cross(ray.m_Direction, e2)));
-	float w = 1 - u - v;
+    edge1 = point2 - point1;
+    edge2 = point3 - point1;
+    
+    h = cross(ray.m_Direction, edge2);
+    a = dot(edge1, h);
 
-	float t0 = dot(e2, cross((ray.m_Origin - point1), e1)) / dot(e1, cross(ray.m_Direction, e2));
+    if (a > -episilon && a < episilon)
+    {
+        return false;    // This ray is parallel to this triangle.
+    }
 
-	if ((u < 0) || (u > 1)) {
-		return false;
-	}
-	else if ((v < 0) || (u + v > 1)) {
-		return false;
-	}
-	else {
-		return true;
-	}
+    f = 1.0 / a;
+    s = ray.m_Origin - point1;
+    u = f * dot(s, h);
+    
+    if (u < 0.0 || u > 1.0)
+    {
+        return false;
+    }
+
+    q = cross(s, edge1);
+    v = f * dot(ray.m_Direction, q);
+
+    if (v < 0.0 || u + v > 1.0)
+    {
+        return false;
+    }
+
+    // At this stage we can compute t to find out where the intersection point is on the line.
+    float t = f * dot(edge2, q);
+    
+    return true;
 }
