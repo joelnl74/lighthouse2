@@ -29,11 +29,13 @@ void RenderCore::Init()
 	Sphere* sphere = new Sphere();
 	sphere->m_CenterPosition = make_float3(0, 0, 5);
 	sphere->m_Radius = 0.5;
+	sphere->m_color = make_float3(0, 255, 0);
 
 	Triangle* triangle = new Triangle();
 	triangle->point1 = make_float3(1.0, 0.5, 1);
 	triangle->point2 = make_float3(1, 0, 1);
 	triangle->point3 = make_float3(1.5, 0, 1);
+	triangle->m_color = make_float3(255, 0, 0);
 
 	m_Primitives.push_back(sphere);
 	m_Primitives.push_back(triangle);
@@ -128,7 +130,7 @@ float3 lh2core::RenderCore::Trace(Ray ray)
 
 		if (intersect)
 		{
-			return make_float3(255, 0, 0);
+			return shape->m_color;
 		}
 	}
 
