@@ -2,7 +2,6 @@
 
 bool Triangle::Intersect(Ray ray)
 {
-    float episilon = 0.000001f;
     float3 edge1, edge2, h, s, q;
     float a, f, u, v;
 
@@ -12,7 +11,7 @@ bool Triangle::Intersect(Ray ray)
     h = cross(ray.m_Direction, edge2);
     a = dot(edge1, h);
 
-    if (a > -episilon && a < episilon)
+    if (a > -EPSILON && a < EPSILON)
     {
         return false;    // This ray is parallel to this triangle.
     }
