@@ -15,6 +15,7 @@
 
 #include "core_settings.h"
 #include "Sphere.h"
+#include "Triangle.h"
 
 using namespace lh2core;
 
@@ -29,13 +30,13 @@ void RenderCore::Init()
 	sphere->m_CenterPosition = make_float3(0, 0, 5);
 	sphere->m_Radius = 0.5;
 
-	Sphere* sphere1 = new Sphere();
-	sphere1->m_CenterPosition = make_float3(1, -0.5, 5);
-	sphere1->m_Radius = 0.5;
+	Triangle* triangle = new Triangle();
+	triangle->point1 = make_float3(1.0, 0.5, 1);
+	triangle->point2 = make_float3(1, 0, 1);
+	triangle->point3 = make_float3(1.5, 0, 1);
 
 	m_Primitives.push_back(sphere);
-	m_Primitives.push_back(sphere1);
-
+	m_Primitives.push_back(triangle);
 }
 
 //  +-----------------------------------------------------------------------------+
@@ -132,7 +133,6 @@ float3 lh2core::RenderCore::Trace(Ray ray)
 	}
 
 
-
 	return make_float3(0, 0, 0);
 }
 
@@ -151,6 +151,11 @@ CoreStats RenderCore::GetCoreStats() const
 //  +-----------------------------------------------------------------------------+
 void RenderCore::Shutdown()
 {
+	for (auto shape : m_Primitives)
+	{
+		delete shape;
+	}
+
 	delete screen;
 }
 
