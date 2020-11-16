@@ -14,8 +14,8 @@
 */
 
 #pragma once
+#include "Primitive.h"
 #include "Ray.h"
-#include "Sphere.h"
 #include "rendersystem.h"
 
 namespace lh2core
@@ -48,7 +48,7 @@ public:
 	void WaitForRender() { /* this core does not support asynchronous rendering yet */ }
 	CoreStats GetCoreStats() const override;
 	void Shutdown();
-	float3 Trace(ADVGR::Ray ray);
+	float3 Trace(Ray ray);
 
 	// unimplemented for the minimal core
 	inline void SetProbePos( const int2 pos ) override {}
@@ -76,7 +76,8 @@ public:
 	CoreStats coreStats;							// rendering statistics
 	unsigned int screenPixels[SCRWIDTH * SCRHEIGHT];
 	float3 screenData[SCRWIDTH * SCRHEIGHT];
-	Sphere sphere;
+
+	vector<Primitive*> m_Primitives;
 };
 
 } // namespace lh2core
